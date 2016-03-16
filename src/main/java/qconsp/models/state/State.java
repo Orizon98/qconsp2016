@@ -12,12 +12,12 @@ public class State {
 
     Integer orderCount = 0;
 
-    public void incrementOrderCount(Integer orderCount) {
-        this.orderCount += orderCount;
+    public void incrementOrderCount(Integer cityOrderCount) {
+        this.orderCount += cityOrderCount;
     }
 
-    public void decrementOrderCount(Integer orderCount) {
-        this.orderCount -= orderCount;
+    public void decrementOrderCount(Integer cityOrderCount) {
+        this.orderCount -= cityOrderCount;
     }
 
     public Integer getOrderCount() {
