@@ -13,11 +13,13 @@ public class OrderToCityPipe extends Pipe<Order, City> {
     @Override
     public void flux(Order order, City city) {
         city.incrementOrderCount();
+        city.incrementOrderCountByStatus(order.getStatus());
     }
 
     @Override
     public void reflux(Order order, City city) {
         city.decrementOrderCount();
+        city.decrementOrderCountByStatus(order.getStatus());
     }
 
 }

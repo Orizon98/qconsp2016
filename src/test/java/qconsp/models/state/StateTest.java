@@ -19,5 +19,5 @@ public class StateTest extends EndpointTestCase {
 
         assertEquals((Integer) 10, state.getOrderCount());
     }
-    
+
 }

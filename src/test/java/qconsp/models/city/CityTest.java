@@ -2,6 +2,7 @@ package qconsp.models.city;
 
 import org.junit.Before;
 import org.junit.Test;
+import qconsp.models.order.Status;
 import qconsp.models.state.State;
 import qconsp.utils.EndpointTestCase;
 
@@ -26,13 +27,17 @@ public class CityTest extends EndpointTestCase {
 
     @Test
     public void testCityPipe() {
-        post("/orders", "{ cityId: '/cities/sao-paulo' }");
+        post("/orders", "{ cityId: '/cities/sao-paulo', status: 'CREATED' }");
+        post("/orders", "{ cityId: '/cities/sao-paulo', status: 'PREPARING' }");
         awaitAsync(20, TimeUnit.SECONDS);
 
         String json = get("/cities/sao-paulo");
         City city = from(json, City.class);
 
-        assertEquals((Integer) 1, city.getOrderCount());
+        assertEquals((Integer) 2, city.getOrderCount());
+        assertEquals((Integer) 1, city.getOrderCountByStatus(Status.CREATED));
+        assertEquals((Integer) 1, city.getOrderCountByStatus(Status.PREPARING));
+        assertEquals((Integer) 0, city.getOrderCountByStatus(Status.DELIVERED));
     }
 
 }

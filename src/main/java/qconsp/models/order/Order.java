@@ -22,4 +22,8 @@ public class Order {
     public IdRef<City> getCityId() {
         return cityId;
     }
+
+    public Status getStatus() {
+        return status;
+    }
 }
