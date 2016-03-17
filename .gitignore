@@ -27,3 +27,5 @@ release
 /target
 appengine-generated
 .DS_Store
+
+node_modules/
