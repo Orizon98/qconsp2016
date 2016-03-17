@@ -2,13 +2,13 @@ package qconsp.models.city;
 
 import org.junit.Before;
 import org.junit.Test;
-import qconsp.models.order.Status;
 import qconsp.models.state.State;
 import qconsp.utils.EndpointTestCase;
 
 import java.util.concurrent.TimeUnit;
 
 import static org.junit.Assert.assertEquals;
+import static qconsp.models.order.Status.*;
 
 public class CityTest extends EndpointTestCase {
 
@@ -35,9 +35,9 @@ public class CityTest extends EndpointTestCase {
         City city = from(json, City.class);
 
         assertEquals((Integer) 2, city.getOrderCount());
-        assertEquals((Integer) 1, city.getOrderCountByStatus(Status.CREATED));
-        assertEquals((Integer) 1, city.getOrderCountByStatus(Status.PREPARING));
-        assertEquals((Integer) 0, city.getOrderCountByStatus(Status.DELIVERED));
+        assertEquals((Integer) 1, city.getOrderCountByStatus(CREATED));
+        assertEquals((Integer) 1, city.getOrderCountByStatus(PREPARING));
+        assertEquals((Integer) 0, city.getOrderCountByStatus(DELIVERED));
     }
 
 }
