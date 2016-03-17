@@ -20,7 +20,7 @@ public class StateTest extends EndpointTestCase {
 
         assertEquals((Integer) 10, state.getOrderCount());
         assertEquals((Integer) 5, state.getOrderCountByStatus(CREATED));
-        assertEquals((Integer) 3, state.getOrderCountByStatus(PREPARING));
+        assertEquals((Integer) 3, state.getOrderCountByStatus(PREPARED));
         assertEquals((Integer) 2, state.getOrderCountByStatus(DELIVERED));
     }
 

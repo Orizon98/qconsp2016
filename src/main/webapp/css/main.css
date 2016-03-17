@@ -1,0 +1,18 @@
+.body {
+    magin: 0px;
+}
+
+section {
+    margin:0 auto;
+    width: 920px;
+}
+
+.throughput table th {
+    font-size: +2.4em;
+}
+
+.throughput table td {
+    width: 210px;
+    text-align: center;
+    font-size: +2em;
+}

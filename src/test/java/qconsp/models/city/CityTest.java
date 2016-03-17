@@ -36,7 +36,7 @@ public class CityTest extends EndpointTestCase {
 
         assertEquals((Integer) 2, city.getOrderCount());
         assertEquals((Integer) 1, city.getOrderCountByStatus(CREATED));
-        assertEquals((Integer) 1, city.getOrderCountByStatus(PREPARING));
+        assertEquals((Integer) 1, city.getOrderCountByStatus(PREPARED));
         assertEquals((Integer) 0, city.getOrderCountByStatus(DELIVERED));
     }
 

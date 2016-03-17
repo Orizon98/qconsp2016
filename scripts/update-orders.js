@@ -36,11 +36,12 @@ module.exports = (function () {
                 updateOrdersBatch(orders, function (batchDone) {
                     done += batchDone;
                     if (done < totalOrders) {
+                        logBatchThroughput();
                         updateOrdersLoop();
                         return;
                     }
 
-                    logThroughput(done, start);
+                    logTotalThroughput();
                 });
             });
         }
@@ -73,17 +74,25 @@ module.exports = (function () {
             queue.push(orders);
         }
 
+        function throughput(total) {
+            var elapsed = new Date().getTime() - start.getTime();
+            var throughput = Math.floor(1000 * total / elapsed);
+            return {elapsed: elapsed, throughput: throughput};
+        }
+
+        function logBatchThroughput() {
+            var t = throughput(done);
+            yawp('/throughputs/' + toStatus.toLowerCase()).update({
+                value: t.throughput
+            });
+        }
+
+        function logTotalThroughput() {
+            var t = throughput(totalOrders);
+            console.log("Finished: " + totalOrders + " orders in " + t.elapsed + " seconds. " + t.throughput + " orders/sec")
+        }
+
         updateOrdersLoop();
-    }
-
-    function getRandomInt(min, max) {
-        return Math.floor(Math.random() * (max + 1 - min)) + min;
-    }
-
-    function logThroughput(totalOrders, start) {
-        var elapsed = Math.floor((new Date().getTime() - start.getTime()) / 1000);
-        var throughput = elapsed == 0 ? totalOrders : Math.floor(totalOrders / elapsed);
-        console.log("Finished: " + totalOrders + " orders in " + elapsed + " seconds. " + throughput + " orders/sec")
     }
 
     return {
