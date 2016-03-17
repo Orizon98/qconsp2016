@@ -35,9 +35,12 @@ module.exports = (function () {
             yawp('/orders').where(['status', '=', fromStatus]).limit(batchSize).list(function (orders) {
                 updateOrdersBatch(orders, function (batchDone) {
                     done += batchDone;
-                    if (done < BATCH_SIZE) {
+                    if (done < totalOrders) {
                         updateOrdersLoop();
+                        return;
                     }
+
+                    logThroughput(done, start);
                 });
             });
         }
