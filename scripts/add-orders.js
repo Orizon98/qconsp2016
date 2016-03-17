@@ -2,8 +2,6 @@ module.exports = (function () {
 
     const BACKEND_API = process.env.QCON2016_API;
 
-    const MAX_CREATE_QUEUE = 30;
-
     var async = require('async');
     var yawp = require('./lib/yawp');
 
@@ -35,7 +33,7 @@ module.exports = (function () {
                 cityId: cities[cityIndex].id
             };
 
-            console.log('order ->', order);
+            console.log('create order ->', order);
 
             yawp('/orders').create(order).done(function () {
                 callback();
@@ -66,8 +64,8 @@ module.exports = (function () {
 
 })();
 
-var addOrder = require('./add-orders.js');
+var addOrders = require('./add-orders.js');
 
 if (require.main === module) {
-    addOrder.run();
+    addOrders.run();
 }

@@ -2,8 +2,6 @@ module.exports = (function () {
 
     const BACKEND_API = process.env.QCON2016_API;
 
-    const MAX_CREATE_QUEUE = 30;
-
     var yawp = require('./lib/yawp');
 
     yawp.config(function (c) {
