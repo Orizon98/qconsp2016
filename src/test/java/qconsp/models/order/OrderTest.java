@@ -5,8 +5,6 @@ import org.junit.Test;
 import qconsp.models.city.City;
 import qconsp.utils.EndpointTestCase;
 
-import java.util.concurrent.TimeUnit;
-
 import static org.junit.Assert.assertEquals;
 
 public class OrderTest extends EndpointTestCase {
@@ -22,17 +20,6 @@ public class OrderTest extends EndpointTestCase {
         Order order = from(json, Order.class);
 
         assertEquals(id(City.class, "sao-paulo"), order.cityId);
-    }
-
-    @Test
-    public void testCityPipe() {
-        post("/orders", "{ cityId: '/cities/sao-paulo' }");
-        awaitAsync(20, TimeUnit.SECONDS);
-
-        String json = get("/cities/sao-paulo");
-        City city = from(json, City.class);
-
-        assertEquals((Integer) 1, city.getOrderCount());
     }
 
 }

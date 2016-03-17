@@ -15,6 +15,10 @@ public class City {
 
     Integer orderCount = 0;
 
+    public IdRef<State> getStateId() {
+        return stateId;
+    }
+
     public void incrementOrderCount() {
         orderCount++;
     }

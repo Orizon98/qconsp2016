@@ -1,13 +1,13 @@
-package qconsp.models.order;
+package qconsp.models.city;
 
 import io.yawp.repository.pipes.Pipe;
-import qconsp.models.city.City;
+import qconsp.models.order.Order;
 
 public class OrderToCityPipe extends Pipe<Order, City> {
 
     @Override
     public void configureSinks(Order order) {
-        addSinkId(order.cityId);
+        addSinkId(order.getCityId());
     }
 
     @Override
