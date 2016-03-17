@@ -12,7 +12,7 @@ module.exports = (function () {
     });
 
     function run() {
-        if (process.argv.length < 6) {
+        if (process.argv.length != 4) {
             console.error('use: add-orders [total orders] [parallel requests]');
             return;
         }
@@ -25,6 +25,8 @@ module.exports = (function () {
     }
 
     function addOrders(totalOrders, parallelRequests, cities) {
+        var start = new Date();
+
         function addOrder(i, callback) {
 
             var cityIndex = getRandomInt(0, cities.length - 1);
@@ -43,13 +45,19 @@ module.exports = (function () {
             });
         }
 
-        async.timesLimit(totalRequests, parallelRequests, addOrder, function () {
-            console.log('finish');
+        async.timesLimit(totalOrders, parallelRequests, addOrder, function () {
+            logThroughput(totalOrders, start);
         });
     }
 
     function getRandomInt(min, max) {
         return Math.floor(Math.random() * (max + 1 - min)) + min;
+    }
+
+    function logThroughput(totalOrders, start) {
+        var elapsed = Math.floor((new Date().getTime() - start.getTime()) / 1000);
+        var throughput = elapsed == 0 ? totalOrders : Math.floor(totalOrders / elapsed);
+        console.log("Finished: " + totalOrders + " orders in " + elapsed + " seconds. " + throughput + " orders/sec")
     }
 
     return {
