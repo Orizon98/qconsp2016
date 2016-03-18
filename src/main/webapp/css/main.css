@@ -3,16 +3,71 @@
 }
 
 section {
-    margin:0 auto;
+    margin: 0 auto;
     width: 920px;
 }
 
 .throughput table th {
     font-size: +2.4em;
+    width: 210px;
 }
 
 .throughput table td {
-    width: 210px;
     text-align: center;
     font-size: +2em;
+}
+
+.states {
+    margin-top: 40px;
+    background-color: #00b3ff;
+}
+
+.states table tr:nth-child(1) {
+    background-color: #007cad;
+}
+
+.states table th {
+    font-size: +2em;
+    width: 180px;
+}
+
+.states table th:nth-child(1) {
+    width: 20%;
+}
+
+.states table td {
+    text-align: center;
+    font-size: +1.4em;
+    padding: 10px;
+}
+
+.cities {
+    margin-top: 40px;
+    background-color: #ffcb00;
+}
+
+.cities table tr:nth-child(1) {
+    background-color: #ae8800;
+}
+
+.cities table th {
+    font-size: +2em;
+    width: 180px;
+}
+
+.cities table th:nth-child(1) {
+    width: 20%;
+}
+
+.cities table td:nth-child(1) {
+    text-align: left;
+    white-space: nowrap;
+    font-size: +1em;
+}
+
+.cities table td {
+    width: 180px;
+    text-align: center;
+    font-size: +1.4em;
+    padding: 10px;
 }
