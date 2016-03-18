@@ -25,7 +25,7 @@ section {
 
 .aggregation table th {
     font-size: +2em;
-    width: 180px;
+    width: 220px;
 }
 
 .aggregation table th:nth-child(1) {

@@ -21,9 +21,8 @@
             var total = initTotal();
 
             aggregations.forEach(function (agg) {
-                agg.added = getAdded(agg);
-                sumTotal(total, agg);
                 showAggregation(type, agg);
+                sumTotal(total, agg);
             });
 
             showTotal(type, total);
@@ -45,7 +44,6 @@
         var selector = '#' + type + '-row-' + name;
         var element = $('<tr id="' + type + '-row-' + name + '"></tr>');
         element.append('<td>' + name.toUpperCase().replace(new RegExp('-', 'g'), ' ') + '</td>');
-        element.append('<td class="' + getChangedClass(prev.added, agg.added) + '">' + agg.added + '</td>');
         element.append('<td class="' + getChangedClass(prev.orderCount, agg.orderCount) + ' total">' + agg.orderCount + '</td>');
         element.append('<td class="' + getChangedClass(prev.orderCountByStatus.CREATED, agg.orderCountByStatus.CREATED) + '">' + nvl(agg.orderCountByStatus.CREATED) + '</td>');
         element.append('<td class="' + getChangedClass(prev.orderCountByStatus.PREPARED, agg.orderCountByStatus.PREPARED) + '">' + nvl(agg.orderCountByStatus.PREPARED) + '</td>');
@@ -63,7 +61,6 @@
     function showTotal(type, total) {
         var element = $('<tr></tr>');
         element.append('<td>Total</td>');
-        element.append('<td>' + total.added + '</td>');
         element.append('<td>' + total.orderCount + '</td>');
         element.append('<td>' + total.orderCountByStatus.CREATED + '</td>');
         element.append('<td>' + total.orderCountByStatus.PREPARED + '</td>');
@@ -72,7 +69,6 @@
     }
 
     function sumTotal(total, agg) {
-        total.added += agg.added;
         total.orderCount += agg.orderCount;
         total.orderCountByStatus.CREATED += nvl(agg.orderCountByStatus.CREATED);
         total.orderCountByStatus.PREPARED += nvl(agg.orderCountByStatus.PREPARED);
@@ -81,7 +77,6 @@
 
     function initTotal() {
         return {
-            added: 0,
             orderCount: 0,
             orderCountByStatus: {
                 CREATED: 0,
@@ -96,19 +91,6 @@
             return 'changed';
         }
         return '';
-    }
-
-    function getAdded(agg) {
-        var id = agg.id;
-
-        if (!(id in baseAggregations)) {
-            baseAggregations[id] = agg;
-            return 0;
-        }
-
-        var base = baseAggregations[id];
-        var added = agg.orderCount - base.orderCount;
-        return added;
     }
 
     function getName(id) {
