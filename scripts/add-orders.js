@@ -2,7 +2,7 @@ module.exports = (function () {
 
     const BACKEND_API = process.env.QCON2016_API;
 
-    const BATCH_SIZE_FOR_THROUGHPUT = 300;
+    const BATCH_SIZE_FOR_THROUGHPUT = 100;
 
     var async = require('async');
     var yawp = require('./lib/yawp');

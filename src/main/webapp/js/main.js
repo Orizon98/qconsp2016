@@ -14,7 +14,6 @@
 
             setTimeout(throughputPulling, 2000);
         });
-
     }
 
     function statesPulling() {
@@ -42,8 +41,8 @@
         var selector = '#' + type + '-row-' + name;
         var element = $('<tr id="' + type + '-row-' + name + '"></tr>');
         element.append('<td>' + name.toUpperCase().replace(new RegExp('-', 'g'), ' ') + '</td>');
-        element.append('<td>' + aggregation.orderCount + '</td>');
-        element.append('<td>' + getThroughput(aggregation) + '</td>');
+        element.append('<td>' + getAdded(aggregation) + '</td>');
+        element.append('<td class="total">' + aggregation.orderCount + '</td>');
         element.append('<td>' + nvl(aggregation.orderCountByStatus.CREATED) + '</td>');
         element.append('<td>' + nvl(aggregation.orderCountByStatus.PREPARED) + '</td>');
         element.append('<td>' + nvl(aggregation.orderCountByStatus.DELIVERED) + '</td>');
@@ -55,7 +54,7 @@
         }
     }
 
-    function getThroughput(aggregation) {
+    function getAdded(aggregation) {
         var id = aggregation.id;
 
         if (!(id in baseAggregations)) {
@@ -68,9 +67,7 @@
 
         var base = baseAggregations[id];
         var added = aggregation.orderCount - base.orderCount;
-        var elapsed = new Date().getTime() - base.time;
-
-        return Math.floor(1000 * added / elapsed);
+        return added;
     }
 
     function getName(id) {

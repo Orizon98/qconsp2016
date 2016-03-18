@@ -4,12 +4,12 @@
 
 section {
     margin: 0 auto;
-    width: 920px;
+    width: 940px;
 }
 
 .throughput table th {
     font-size: +2.4em;
-    width: 210px;
+    width: 230px;
 }
 
 .throughput table td {
@@ -17,47 +17,46 @@ section {
     font-size: +2em;
 }
 
-.states {
+/* aggregations */
+
+.aggregation {
     margin-top: 40px;
-    background-color: #00b3ff;
 }
 
-.states table tr:nth-child(1) {
-    background-color: #007cad;
-}
-
-.states table th {
+.aggregation table th {
     font-size: +2em;
     width: 180px;
 }
 
-.states table th:nth-child(1) {
+.aggregation table th:nth-child(1) {
     width: 20%;
 }
 
-.states table td {
+.aggregation table th:nth-child(2) {
+    width: 15%;
+}
+
+.aggregation table td {
     text-align: center;
     font-size: +1.4em;
     padding: 10px;
 }
 
-.cities {
-    margin-top: 40px;
-    background-color: #ffcb00;
+/* states */
+
+.states {
+    background-color: #00b3ff;
 }
 
-.cities table tr:nth-child(1) {
-    background-color: #ae8800;
+.states table tr:nth-child(1) {
+    background-color: #008fc8;
 }
 
-.cities table th {
-    font-size: +2em;
-    width: 180px;
+.states table td.total {
+    background-color: #008fc8;
 }
 
-.cities table th:nth-child(1) {
-    width: 20%;
-}
+/* cities */
 
 .cities table td:nth-child(1) {
     text-align: left;
@@ -65,9 +64,14 @@ section {
     font-size: +1em;
 }
 
-.cities table td {
-    width: 180px;
-    text-align: center;
-    font-size: +1.4em;
-    padding: 10px;
+.cities {
+    background-color: #ffcb00;
+}
+
+.cities table tr:nth-child(1) {
+    background-color: #cda200;
+}
+
+.cities table td.total {
+    background-color: #cda200;
 }
