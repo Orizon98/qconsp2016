@@ -2,6 +2,6 @@
     <queue>
         <name>default</name>
         <rate>500/s</rate>
-        <bucket-size>800</bucket-size>
+        <bucket-size>300</bucket-size>
     </queue>
 </queue-entries>
