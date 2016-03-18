@@ -46,13 +46,22 @@ section {
     font-weight: bold;
 }
 
+.aggregation thead {
+    cursor: pointer;
+}
+
+.aggregation tfoot td:nth-child(1) {
+    font-size: +2em;
+    font-weight: bold;
+}
+
 /* states */
 
 .states {
     background-color: #00b3ff;
 }
 
-.states table tr:nth-child(1) {
+.states table thead tr, .states table tfoot tr {
     background-color: #008fc8;
 }
 
@@ -60,9 +69,13 @@ section {
     background-color: #008fc8;
 }
 
+.states .changed {
+    background-color: #008fc8;
+}
+
 /* cities */
 
-.cities table td:nth-child(1) {
+.cities table tbody td:nth-child(1) {
     text-align: left;
     white-space: nowrap;
     font-size: +1em;
@@ -72,10 +85,14 @@ section {
     background-color: #ffcb00;
 }
 
-.cities table tr:nth-child(1) {
+.cities table thead tr, .cities table tfoot tr {
     background-color: #cda200;
 }
 
 .cities table td.total {
+    background-color: #cda200;
+}
+
+.cities .changed {
     background-color: #cda200;
 }

@@ -12,28 +12,25 @@
             });
 
             $('#global-throughput').html(total);
-
             setTimeout(throughputPulling, 2000);
         });
     }
 
-    function statesPulling() {
-        yawp('/states').order([{p: 'id'}]).list(function (states) {
-            states.forEach(function (aggregation) {
-                showAggregation('states', aggregation);
+    function aggPulling(type, query) {
+        query.list(function (aggregations) {
+            var total = initTotal();
+
+            aggregations.forEach(function (agg) {
+                agg.added = getAdded(agg);
+                sumTotal(total, agg);
+                showAggregation(type, agg);
             });
 
-            setTimeout(statesPulling, 2000);
-        });
-    }
+            showTotal(type, total);
 
-    function citiesPulling() {
-        yawp('/cities').order([{p: 'id'}]).list(function (cities) {
-            cities.forEach(function (aggregation) {
-                showAggregation('cities', aggregation);
-            });
-
-            setTimeout(citiesPulling, 2000);
+            setTimeout(function () {
+                aggPulling(type, query);
+            }, 2000);
         });
     }
 
@@ -48,7 +45,7 @@
         var selector = '#' + type + '-row-' + name;
         var element = $('<tr id="' + type + '-row-' + name + '"></tr>');
         element.append('<td>' + name.toUpperCase().replace(new RegExp('-', 'g'), ' ') + '</td>');
-        element.append('<td class="' + getChangedClass(getAdded(prev), getAdded(agg)) + '">' + getAdded(agg) + '</td>');
+        element.append('<td class="' + getChangedClass(prev.added, agg.added) + '">' + agg.added + '</td>');
         element.append('<td class="' + getChangedClass(prev.orderCount, agg.orderCount) + ' total">' + agg.orderCount + '</td>');
         element.append('<td class="' + getChangedClass(prev.orderCountByStatus.CREATED, agg.orderCountByStatus.CREATED) + '">' + nvl(agg.orderCountByStatus.CREATED) + '</td>');
         element.append('<td class="' + getChangedClass(prev.orderCountByStatus.PREPARED, agg.orderCountByStatus.PREPARED) + '">' + nvl(agg.orderCountByStatus.PREPARED) + '</td>');
@@ -57,10 +54,41 @@
         if ($(selector).length) {
             $(selector).html(element.html());
         } else {
-            $('.' + type + ' table').append(element);
+            $('.' + type + ' table tbody').append(element);
         }
 
         previousAggregations[agg.id] = agg;
+    }
+
+    function showTotal(type, total) {
+        var element = $('<tr></tr>');
+        element.append('<td>Total</td>');
+        element.append('<td>' + total.added + '</td>');
+        element.append('<td>' + total.orderCount + '</td>');
+        element.append('<td>' + total.orderCountByStatus.CREATED + '</td>');
+        element.append('<td>' + total.orderCountByStatus.PREPARED + '</td>');
+        element.append('<td>' + total.orderCountByStatus.DELIVERED + '</td>');
+        $('.' + type + ' table tfoot').html(element);
+    }
+
+    function sumTotal(total, agg) {
+        total.added += agg.added;
+        total.orderCount += agg.orderCount;
+        total.orderCountByStatus.CREATED += nvl(agg.orderCountByStatus.CREATED);
+        total.orderCountByStatus.PREPARED += nvl(agg.orderCountByStatus.PREPARED);
+        total.orderCountByStatus.DELIVERED += nvl(agg.orderCountByStatus.DELIVERED);
+    }
+
+    function initTotal() {
+        return {
+            added: 0,
+            orderCount: 0,
+            orderCountByStatus: {
+                CREATED: 0,
+                PREPARED: 0,
+                DELIVERED: 0
+            }
+        };
     }
 
     function getChangedClass(prev, actual) {
@@ -91,10 +119,15 @@
         return value ? value : 0;
     }
 
+    $('.aggregation thead').click(function () {
+        $(this).closest('table').find('tbody').toggle();
+    });
+
     $(document).ready(function () {
         throughputPulling();
-        statesPulling();
-        citiesPulling();
+        aggPulling('states', yawp('/states').order([{p: 'id'}]));
+        aggPulling('cities', yawp('/cities').order([{p: 'id'}]));
+
     });
 
 
