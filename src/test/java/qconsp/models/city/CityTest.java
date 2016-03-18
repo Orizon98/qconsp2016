@@ -28,7 +28,7 @@ public class CityTest extends EndpointTestCase {
     @Test
     public void testCityPipe() {
         post("/orders", "{ cityId: '/cities/sao-paulo', status: 'CREATED' }");
-        post("/orders", "{ cityId: '/cities/sao-paulo', status: 'PREPARING' }");
+        post("/orders", "{ cityId: '/cities/sao-paulo', status: 'PREPARED' }");
         awaitAsync(20, TimeUnit.SECONDS);
 
         String json = get("/cities/sao-paulo");

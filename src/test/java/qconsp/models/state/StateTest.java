@@ -12,7 +12,7 @@ public class StateTest extends EndpointTestCase {
 
     @Test
     public void testCityToStatePipe() {
-        post("/cities/sao-paulo", "{ stateId: '/states/sp', orderCount: 10, orderCountByStatus: { CREATED: 5, PREPARING: 3, DELIVERED: 2 } }");
+        post("/cities/sao-paulo", "{ stateId: '/states/sp', orderCount: 10, orderCountByStatus: { CREATED: 5, PREPARED: 3, DELIVERED: 2 } }");
         awaitAsync(20, TimeUnit.SECONDS);
 
         String json = get("/states/sp");
