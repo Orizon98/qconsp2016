@@ -1,6 +1,7 @@
 (function ($) {
 
     var baseAggregations = {};
+    var previousAggregations = {};
 
     function throughputPulling() {
         yawp('/throughputs').list(function (ts) {
@@ -36,37 +37,49 @@
         });
     }
 
-    function showAggregation(type, aggregation) {
-        var name = getName(aggregation.id);
+    function showAggregation(type, agg) {
+        var prev = previousAggregations[agg.id];
+
+        if (!prev) {
+            prev = agg;
+        }
+
+        var name = getName(agg.id);
         var selector = '#' + type + '-row-' + name;
         var element = $('<tr id="' + type + '-row-' + name + '"></tr>');
         element.append('<td>' + name.toUpperCase().replace(new RegExp('-', 'g'), ' ') + '</td>');
-        element.append('<td>' + getAdded(aggregation) + '</td>');
-        element.append('<td class="total">' + aggregation.orderCount + '</td>');
-        element.append('<td>' + nvl(aggregation.orderCountByStatus.CREATED) + '</td>');
-        element.append('<td>' + nvl(aggregation.orderCountByStatus.PREPARED) + '</td>');
-        element.append('<td>' + nvl(aggregation.orderCountByStatus.DELIVERED) + '</td>');
+        element.append('<td class="' + getChangedClass(getAdded(prev), getAdded(agg)) + '">' + getAdded(agg) + '</td>');
+        element.append('<td class="' + getChangedClass(prev.orderCount, agg.orderCount) + ' total">' + agg.orderCount + '</td>');
+        element.append('<td class="' + getChangedClass(prev.orderCountByStatus.CREATED, agg.orderCountByStatus.CREATED) + '">' + nvl(agg.orderCountByStatus.CREATED) + '</td>');
+        element.append('<td class="' + getChangedClass(prev.orderCountByStatus.PREPARED, agg.orderCountByStatus.PREPARED) + '">' + nvl(agg.orderCountByStatus.PREPARED) + '</td>');
+        element.append('<td class="' + getChangedClass(prev.orderCountByStatus.DELIVERED, agg.orderCountByStatus.DELIVERED) + '">' + nvl(agg.orderCountByStatus.DELIVERED) + '</td>');
 
         if ($(selector).length) {
             $(selector).html(element.html());
         } else {
             $('.' + type + ' table').append(element);
         }
+
+        previousAggregations[agg.id] = agg;
     }
 
-    function getAdded(aggregation) {
-        var id = aggregation.id;
+    function getChangedClass(prev, actual) {
+        if (prev != actual) {
+            return 'changed';
+        }
+        return '';
+    }
+
+    function getAdded(agg) {
+        var id = agg.id;
 
         if (!(id in baseAggregations)) {
-            baseAggregations[id] = {
-                orderCount: aggregation.orderCount,
-                time: new Date().getTime()
-            };
+            baseAggregations[id] = agg;
             return 0;
         }
 
         var base = baseAggregations[id];
-        var added = aggregation.orderCount - base.orderCount;
+        var added = agg.orderCount - base.orderCount;
         return added;
     }
 
