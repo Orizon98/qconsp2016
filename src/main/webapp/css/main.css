@@ -43,7 +43,7 @@ section {
 }
 
 .aggregation .changed {
-    color: green;
+    font-weight: bold;
 }
 
 /* states */
