@@ -1,36 +1,54 @@
 (function ($) {
 
-    var baseAggregations = {};
     var previousAggregations = {};
 
     function throughputPulling() {
-        yawp('/throughputs').list(function (ts) {
-            var total = 0;
-            ts.forEach(function (t) {
-                total += t.value;
-                $('#global-throughput-' + getName(t.id)).html(t.value);
-            });
-
-            $('#global-throughput').html(total);
+        function loop() {
             setTimeout(throughputPulling, 2000);
-        });
+        }
+
+        yawp('/throughputs').list(function (ts) {
+            try {
+                var total = 0;
+                ts.forEach(function (t) {
+                    total += t.value;
+                    $('#global-throughput-' + getName(t.id)).html(t.value);
+                });
+
+                $('#global-throughput').html(total);
+            } catch (err) {
+                // ?
+            } finally {
+                loop();
+            }
+
+        }).fail(loop);
     }
 
     function aggPulling(type, query) {
-        query.list(function (aggregations) {
-            var total = initTotal();
-
-            aggregations.forEach(function (agg) {
-                showAggregation(type, agg);
-                sumTotal(total, agg);
-            });
-
-            showTotal(type, total);
-
+        function loop() {
             setTimeout(function () {
                 aggPulling(type, query);
             }, 2000);
-        });
+        }
+
+        query.list(function (aggregations) {
+            try {
+                var total = initTotal();
+
+                aggregations.forEach(function (agg) {
+                    showAggregation(type, agg);
+                    sumTotal(total, agg);
+                });
+
+                showTotal(type, total);
+            } catch (err) {
+                // ?
+            } finally {
+                loop();
+            }
+
+        }).fail(loop);
     }
 
     function showAggregation(type, agg) {
