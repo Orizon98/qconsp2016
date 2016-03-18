@@ -1,5 +1,6 @@
 (function ($) {
 
+    var maxThroughput = 0;
     var previousAggregations = {};
 
     function throughputPulling() {
@@ -7,15 +8,37 @@
             setTimeout(throughputPulling, 2000);
         }
 
+        function expired(timestamp) {
+            if (!timestamp) {
+                return true;
+            }
+            var elapsed = new Date().getTime() - timestamp;
+            console.log('elapsed', elapsed);
+            return elapsed / 1000 > 15;
+        }
+
         yawp('/throughputs').list(function (ts) {
             try {
                 var total = 0;
                 ts.forEach(function (t) {
-                    total += t.value;
-                    $('#global-throughput-' + getName(t.id)).html(t.value);
+                    var value = 0;
+                    if (!expired(t.timestamp)) {
+                        value = t.value;
+                    }
+
+                    total += value;
+                    $('#global-throughput-' + getName(t.id)).html(value);
+
                 });
 
-                $('#global-throughput').html(total);
+                if (total > maxThroughput) {
+                    maxThroughput = total;
+                }
+
+                $('#global-throughput-max').html(maxThroughput);
+                $('#global-throughput-total').html(total);
+
+
             } catch (err) {
                 // ?
             } finally {

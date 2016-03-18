@@ -2,7 +2,7 @@ module.exports = (function () {
 
     const BACKEND_API = process.env.QCON2016_API;
 
-    const BATCH_SIZE = 100;
+    const BATCH_SIZE = 400;
 
     var async = require('async');
     var yawp = require('./lib/yawp');
@@ -83,7 +83,8 @@ module.exports = (function () {
         function logBatchThroughput() {
             var t = throughput(done);
             yawp('/throughputs/' + toStatus.toLowerCase()).update({
-                value: t.throughput
+                value: t.throughput,
+                timestamp: new Date().getTime()
             });
         }
 

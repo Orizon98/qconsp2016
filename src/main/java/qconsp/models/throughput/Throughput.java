@@ -12,4 +12,6 @@ public class Throughput {
 
     Integer value;
 
+    Long timestamp;
+
 }

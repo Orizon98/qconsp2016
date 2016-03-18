@@ -62,7 +62,8 @@ module.exports = (function () {
         function logBatchThroughput() {
             var t = throughput(done);
             yawp('/throughputs/created').update({
-                value: t.throughput
+                value: t.throughput,
+                timestamp: new Date().getTime()
             });
         }
 
