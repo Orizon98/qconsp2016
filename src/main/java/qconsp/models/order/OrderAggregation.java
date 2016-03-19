@@ -43,4 +43,9 @@ public class OrderAggregation {
         }
         return orderCountByStatus.get(status);
     }
+
+    public void drain() {
+        this.orderCount = 0;
+        this.orderCountByStatus = new HashMap<>();
+    }
 }

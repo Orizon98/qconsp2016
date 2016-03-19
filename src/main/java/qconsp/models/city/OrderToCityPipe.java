@@ -22,4 +22,8 @@ public class OrderToCityPipe extends Pipe<Order, City> {
         city.decrementOrderCountByStatus(order.getStatus(), 1);
     }
 
+    @Override
+    public void drain(City city) {
+        city.drain();
+    }
 }
