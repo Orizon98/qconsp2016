@@ -5,7 +5,8 @@ module.exports = (function () {
     var yawp = require('./lib/yawp');
 
     yawp.config(function (c) {
-        c.baseUrl(BACKEND_API ? BACKEND_API : 'http://localhost:8080/api');
+        //c.baseUrl(BACKEND_API ? BACKEND_API : 'http://localhost:8080/api');
+        c.baseUrl('http://localhost:8080/api');
     });
 
     function run() {
