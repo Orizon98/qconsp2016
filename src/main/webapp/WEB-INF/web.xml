@@ -34,6 +34,15 @@
         <url-pattern>/_ah/yawp/*</url-pattern>
     </servlet-mapping>
 
+    <servlet>
+        <servlet-name>PipelineServlet</servlet-name>
+        <servlet-class>com.google.appengine.tools.pipeline.impl.servlets.PipelineServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>PipelineServlet</servlet-name>
+        <url-pattern>/_ah/pipeline/*</url-pattern>
+    </servlet-mapping>
+
     <!-- security-constraint>
         <web-resource-collection>
             <web-resource-name>qconsp-all</web-resource-name>

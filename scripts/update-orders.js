@@ -28,51 +28,64 @@ module.exports = (function () {
         var updatedOrders = {};
         var start = new Date();
         var done = 0;
+        var batchDone = 0;
+        var queue;
+        var cursor;
 
-        function updateOrdersLoop() {
+        function loadMoreOrders() {
             var batchSize = (totalOrders - done < BATCH_SIZE) ? totalOrders - done : BATCH_SIZE;
 
-            yawp('/orders').where(['status', '=', fromStatus]).limit(batchSize).list(function (orders) {
-                updateOrdersBatch(orders, function (batchDone) {
-                    done += batchDone;
-                    if (done < totalOrders) {
-                        logBatchThroughput();
-                        updateOrdersLoop();
-                        return;
-                    }
+            var params = {
+                status: fromStatus,
+                limit: batchSize
+            };
 
-                    logTotalThroughput();
-                });
+            if (cursor) {
+                params.cursor = cursor;
+            }
+
+            yawp('/orders').params(params).get('nextBatch').done(function (batch) {
+                cursor = batch.cursor;
+                queue.push(batch.orders);
             });
         }
 
-        function updateOrdersBatch(orders, callback) {
-            var batchDone = 0;
-
-            function updateOrder(order, doneCallback) {
-                if (order.id in updatedOrders) {
-                    doneCallback();
-                    return;
-                }
-
-                console.log('update order ->', order.id, 'city=' + order.cityId, 'from=' + fromStatus, 'to=' + toStatus);
-
-                order.status = toStatus;
-                yawp.update(order).done(function () {
-                    batchDone++;
-                    doneCallback();
-                }).fail(function () {
-                    console.log('fail?! ', err);
-                    doneCallback();
-                });
+        function checkLoadMoreOrders() {
+            batchDone++;
+            if (batchDone == BATCH_SIZE / 2) {
+                batchDone = 0;
+                loadMoreOrders();
             }
-
-            var queue = async.queue(updateOrder, parallelRequests);
-            queue.drain = function () {
-                callback(batchDone);
-            }
-            queue.push(orders);
         }
+
+        function updateOrder(order, doneCallback) {
+            if (order.id in updatedOrders) {
+                checkLoadMoreOrders();
+                doneCallback();
+                return;
+            }
+
+            console.log('update order ->', order.id, 'city=' + order.cityId, 'from=' + fromStatus, 'to=' + toStatus);
+
+            order.status = toStatus;
+            yawp.update(order).done(function () {
+                done++;
+                updatedOrders[order.id] = true;
+                checkLoadMoreOrders();
+                doneCallback();
+            }).fail(function () {
+                console.log('fail?! ', err);
+                checkLoadMoreOrders();
+                doneCallback();
+            });
+        }
+
+        var queue = async.queue(updateOrder, parallelRequests);
+        queue.drain = function () {
+            callback(batchDone);
+        }
+
+        loadMoreOrders();
 
         function throughput(total) {
             var elapsed = new Date().getTime() - start.getTime();
@@ -92,15 +105,14 @@ module.exports = (function () {
             var t = throughput(totalOrders);
             console.log("Finished: " + totalOrders + " orders in " + t.elapsed + " seconds. " + t.throughput + " orders/sec")
         }
-
-        updateOrdersLoop();
     }
 
     return {
         run: run
     };
 
-})();
+})
+();
 
 var updateOrders = require('./update-orders.js');
 
