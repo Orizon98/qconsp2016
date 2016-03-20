@@ -1,5 +1,6 @@
 package qconsp.models.order;
 
+import io.yawp.commons.http.annotation.GET;
 import io.yawp.repository.actions.Action;
 import io.yawp.repository.query.QueryBuilder;
 
@@ -9,6 +10,7 @@ import java.util.Map;
 
 public class OrderBatchAction extends Action<Order> {
 
+    @GET
     public Object nextBatch(Map<String, String> params) {
         QueryBuilder<Order> q = createQuery(params);
 

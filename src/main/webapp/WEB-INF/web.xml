@@ -45,8 +45,8 @@
 
     <security-constraint>
         <web-resource-collection>
-            <web-resource-name>qconsp-admin</web-resource-name>
-            <url-pattern>/_ah/*</url-pattern>
+            <web-resource-name>qconsp-pipeline</web-resource-name>
+            <url-pattern>/_ah/pipeline/*</url-pattern>
         </web-resource-collection>
         <auth-constraint>
             <role-name>admin</role-name>
@@ -57,37 +57,4 @@
         <role-name>admin</role-name>
     </security-role>
 
-    <!-- security-constraint>
-        <web-resource-collection>
-            <web-resource-name>qconsp-all</web-resource-name>
-            <url-pattern>/*</url-pattern>
-        </web-resource-collection>
-        <auth-constraint>
-            <role-name>*</role-name>
-        </auth-constraint>
-    </security-constraint>
-
-    <security-constraint>
-        <web-resource-collection>
-            <web-resource-name>qconsp-tasks</web-resource-name>
-            <url-pattern>/api/_tasks/*</url-pattern>
-        </web-resource-collection>
-        <auth-constraint>
-            <role-name>admin</role-name>
-        </auth-constraint>
-    </security-constraint>
-
-    <security-constraint>
-        <web-resource-collection>
-            <web-resource-name>qconsp-fixtures</web-resource-name>
-            <url-pattern>/fixtures/*</url-pattern>
-        </web-resource-collection>
-    </security-constraint>
-
-    <security-constraint>
-        <web-resource-collection>
-            <web-resource-name>qconsp-tests</web-resource-name>
-            <url-pattern>/test/*</url-pattern>
-        </web-resource-collection>
-    </security-constraint -->
 </web-app>

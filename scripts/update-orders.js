@@ -44,9 +44,11 @@ module.exports = (function () {
                 params.cursor = cursor;
             }
 
-            yawp('/orders').params(params).get('nextBatch').done(function (batch) {
+            yawp('/orders').params(params).get('next-batch').done(function (batch) {
                 cursor = batch.cursor;
                 queue.push(batch.orders);
+            }).fail(function (err) {
+                console.log('err', err);
             });
         }
 
@@ -82,7 +84,7 @@ module.exports = (function () {
 
         var queue = async.queue(updateOrder, parallelRequests);
         queue.drain = function () {
-            callback(batchDone);
+            logTotalThroughput();
         }
 
         loadMoreOrders();
