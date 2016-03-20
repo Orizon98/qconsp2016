@@ -26,5 +26,5 @@ public class CityShield extends Shield<City> {
     private boolean isDevelopment() {
         return yawp.driver().environment().isDevelopment();
     }
-    
+
 }

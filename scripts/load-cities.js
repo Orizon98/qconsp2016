@@ -72,8 +72,12 @@ module.exports = (function () {
             stateId: '/states/rj'
         }];
 
-        yawp('/cities').create(sp);
-        yawp('/cities').create(rj);
+        yawp('/cities').create(sp).fail(failLog);
+        yawp('/cities').create(rj).fail(failLog);
+    }
+
+    function failLog(err) {
+        console.log('err', err);
     }
 
     return {
