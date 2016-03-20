@@ -29,11 +29,13 @@ module.exports = (function () {
         var start = new Date();
         var done = 0;
         var batchDone = 0;
+        var loaded = 0;
         var queue;
         var cursor;
 
         function loadMoreOrders() {
-            var batchSize = (totalOrders - done < BATCH_SIZE) ? totalOrders - done : BATCH_SIZE;
+            var batchSize = (totalOrders - loaded < BATCH_SIZE) ? totalOrders - loaded : BATCH_SIZE;
+            loaded += batchSize;
 
             var params = {
                 status: fromStatus,
@@ -55,27 +57,31 @@ module.exports = (function () {
         function checkLoadMoreOrders() {
             batchDone++;
             if (batchDone == BATCH_SIZE / 2) {
+                logBatchThroughput();
                 batchDone = 0;
-                loadMoreOrders();
+
+                if (loaded - done <= 2 * BATCH_SIZE) {
+                    loadMoreOrders();
+                }
             }
         }
 
         function updateOrder(order, doneCallback) {
-            if (order.id in updatedOrders) {
+            if (updatedOrders[order.id]) {
                 checkLoadMoreOrders();
                 doneCallback();
                 return;
             }
+            updatedOrders[order.id] = true;
 
             console.log('update order ->', order.id, 'city=' + order.cityId, 'from=' + fromStatus, 'to=' + toStatus);
 
             order.status = toStatus;
             yawp.update(order).done(function () {
                 done++;
-                updatedOrders[order.id] = true;
                 checkLoadMoreOrders();
                 doneCallback();
-            }).fail(function () {
+            }).fail(function (err) {
                 console.log('fail?! ', err);
                 checkLoadMoreOrders();
                 doneCallback();

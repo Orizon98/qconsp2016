@@ -7,6 +7,11 @@ import qconsp.models.order.Status;
 public class CityToStatePipe extends Pipe<City, State> {
 
     @Override
+    public String getQueueName() {
+        return "city-to-state-pipe";
+    }
+
+    @Override
     public void configureSinks(City city) {
         addSinkId(city.getStateId());
     }

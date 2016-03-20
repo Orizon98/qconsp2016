@@ -13,7 +13,6 @@
                 return true;
             }
             var elapsed = new Date().getTime() - timestamp;
-            console.log('elapsed', elapsed);
             return elapsed / 1000 > 15;
         }
 

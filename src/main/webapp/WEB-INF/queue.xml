@@ -1,11 +1,21 @@
 <queue-entries>
     <queue>
-        <name>default</name>
+        <name>order-to-city-pipe</name>
         <rate>500/s</rate>
         <bucket-size>500</bucket-size>
         <retry-parameters>
-            <min-backoff-seconds>10</min-backoff-seconds>
-            <max-backoff-seconds>20</max-backoff-seconds>
+            <min-backoff-seconds>8</min-backoff-seconds>
+            <max-backoff-seconds>12</max-backoff-seconds>
+            <max-doublings>0</max-doublings>
+        </retry-parameters>
+    </queue>
+    <queue>
+        <name>city-to-state-pipe</name>
+        <rate>500/s</rate>
+        <bucket-size>500</bucket-size>
+        <retry-parameters>
+            <min-backoff-seconds>8</min-backoff-seconds>
+            <max-backoff-seconds>12</max-backoff-seconds>
             <max-doublings>0</max-doublings>
         </retry-parameters>
     </queue>
