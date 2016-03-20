@@ -22,10 +22,16 @@ public class StopPipelineAction extends Action<Order> {
 
         try {
             service.stopPipeline(id);
+            service.deletePipelineRecords(id);
         } catch (NoSuchObjectException e) {
             throw new HttpException(404);
         }
 
         return id;
+    }
+
+    @GET
+    public Integer count() {
+        return yawp(Order.class).ids().size();
     }
 }
