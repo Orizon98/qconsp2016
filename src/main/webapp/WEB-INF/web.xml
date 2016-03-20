@@ -34,7 +34,7 @@
         <url-pattern>/_ah/yawp/*</url-pattern>
     </servlet-mapping>
 
-    <servlet>
+    <!-- servlet>
         <servlet-name>PipelineServlet</servlet-name>
         <servlet-class>com.google.appengine.tools.pipeline.impl.servlets.PipelineServlet</servlet-class>
     </servlet>
@@ -55,6 +55,6 @@
 
     <security-role>
         <role-name>admin</role-name>
-    </security-role>
+    </security-role -->
 
 </web-app>
