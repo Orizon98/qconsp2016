@@ -1,0 +1,3 @@
+- segurança de order: só inclusao + validacao
+- throughputs por conjuntos de batchs
+- criar maquina no gce
