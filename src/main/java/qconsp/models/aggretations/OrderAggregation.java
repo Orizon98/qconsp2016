@@ -1,6 +1,7 @@
-package qconsp.models.order;
+package qconsp.models.aggretations;
 
 import io.yawp.repository.annotations.Json;
+import qconsp.models.order.Status;
 
 import java.util.HashMap;
 import java.util.Map;

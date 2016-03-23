@@ -6,11 +6,6 @@ import qconsp.models.order.Order;
 public class OrderToCityPipe extends Pipe<Order, City> {
 
     @Override
-    public String getQueueName() {
-        return "order-to-city-pipe";
-    }
-
-    @Override
     public void configureSinks(Order order) {
         addSinkId(order.getCityId());
     }

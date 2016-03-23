@@ -10,7 +10,7 @@ public class CityShield extends Shield<City> {
 
     @Override
     public void create(List<City> objects) {
-        allow(isDevelopment());
+        allow(!isProduction());
     }
 
     @Override
@@ -23,8 +23,8 @@ public class CityShield extends Shield<City> {
         allow();
     }
 
-    private boolean isDevelopment() {
-        return yawp.driver().environment().isDevelopment();
+    private boolean isProduction() {
+        return yawp.driver().environment().isProduction();
     }
 
 }
