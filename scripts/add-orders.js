@@ -28,6 +28,9 @@ module.exports = (function () {
         var start = new Date();
         var done = 0;
         var batchDone = 0;
+        var throughputStart = new Date();
+        var throughputBatchCount = 0;
+        var throughputBatchDone = 0;
 
         function addOrder(i, callback) {
             if (batchDone == BATCH_SIZE_FOR_THROUGHPUT) {
@@ -46,6 +49,7 @@ module.exports = (function () {
             yawp('/orders').create(order).done(function () {
                 done++;
                 batchDone++;
+                throughputBatchDone++;
                 callback();
             }).fail(function (err) {
                 console.log('fail?! ', err);
@@ -53,22 +57,29 @@ module.exports = (function () {
             });
         }
 
-        function throughput(total) {
+        function throughput(start, total) {
             var elapsed = new Date().getTime() - start.getTime();
             var throughput = Math.floor(1000 * total / elapsed);
             return {elapsed: elapsed, throughput: throughput};
         }
 
         function logBatchThroughput() {
-            var t = throughput(done);
+            var t = throughput(throughputStart, throughputBatchDone);
             yawp('/throughputs/created').update({
                 value: t.throughput,
                 timestamp: new Date().getTime()
             });
+
+            throughputBatchCount++;
+            if (throughputBatchCount == 10) {
+                throughputStart = new Date();
+                throughputBatchDone = 0;
+                throughputBatchCount = 0;
+            }
         }
 
         function logTotalThroughput() {
-            var t = throughput(totalOrders);
+            var t = throughput(start, totalOrders);
             console.log("Finished: " + totalOrders + " orders in " + t.elapsed + " seconds. " + t.throughput + " orders/sec")
         }
 

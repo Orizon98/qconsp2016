@@ -32,6 +32,10 @@ module.exports = (function () {
         var loaded = 0;
         var queue;
         var cursor;
+        var throughputStart = new Date();
+        var throughputBatchCount = 0;
+        var throughputBatchDone = 0;
+
 
         function loadMoreOrders() {
             var batchSize = (totalOrders - loaded < BATCH_SIZE) ? totalOrders - loaded : BATCH_SIZE;
@@ -56,11 +60,11 @@ module.exports = (function () {
 
         function checkLoadMoreOrders() {
             batchDone++;
-            if (batchDone == BATCH_SIZE / 2) {
+            if (batchDone >= BATCH_SIZE / 2) {
                 logBatchThroughput();
                 batchDone = 0;
 
-                if (loaded - done <= 2 * BATCH_SIZE) {
+                if (loaded - done <= 3 * BATCH_SIZE) {
                     loadMoreOrders();
                 }
             }
@@ -79,6 +83,7 @@ module.exports = (function () {
             order.status = toStatus;
             yawp.update(order).done(function () {
                 done++;
+                throughputBatchDone++;
                 checkLoadMoreOrders();
                 doneCallback();
             }).fail(function (err) {
@@ -95,22 +100,29 @@ module.exports = (function () {
 
         loadMoreOrders();
 
-        function throughput(total) {
+        function throughput(start, total) {
             var elapsed = new Date().getTime() - start.getTime();
             var throughput = Math.floor(1000 * total / elapsed);
             return {elapsed: elapsed, throughput: throughput};
         }
 
         function logBatchThroughput() {
-            var t = throughput(done);
+            var t = throughput(throughputStart, throughputBatchDone);
             yawp('/throughputs/' + toStatus.toLowerCase()).update({
                 value: t.throughput,
                 timestamp: new Date().getTime()
             });
+
+            throughputBatchCount++;
+            if (throughputBatchCount == 10) {
+                throughputStart = new Date();
+                throughputBatchDone = 0;
+                throughputBatchCount = 0;
+            }
         }
 
         function logTotalThroughput() {
-            var t = throughput(totalOrders);
+            var t = throughput(start, totalOrders);
             console.log("Finished: " + totalOrders + " orders in " + t.elapsed + " seconds. " + t.throughput + " orders/sec")
         }
     }
