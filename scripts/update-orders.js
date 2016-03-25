@@ -95,7 +95,9 @@ module.exports = (function () {
 
         var queue = async.queue(updateOrder, parallelRequests);
         queue.drain = function () {
-            logTotalThroughput();
+            if (loaded >= totalOrders) {
+                logTotalThroughput();
+            }
         }
 
         loadMoreOrders();
@@ -123,7 +125,7 @@ module.exports = (function () {
 
         function logTotalThroughput() {
             var t = throughput(start, totalOrders);
-            console.log("Finished: " + totalOrders + " orders in " + t.elapsed + " seconds. " + t.throughput + " orders/sec")
+            console.log("Finished: " + totalOrders + " orders in " + (t.elapsed / 1000) + " seconds. " + t.throughput + " orders/sec")
         }
     }
 

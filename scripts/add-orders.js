@@ -80,7 +80,7 @@ module.exports = (function () {
 
         function logTotalThroughput() {
             var t = throughput(start, totalOrders);
-            console.log("Finished: " + totalOrders + " orders in " + t.elapsed + " seconds. " + t.throughput + " orders/sec")
+            console.log("Finished: " + totalOrders + " orders in " + (t.elapsed/1000) + " seconds. " + t.throughput + " orders/sec")
         }
 
         async.timesLimit(totalOrders, parallelRequests, addOrder, function () {
