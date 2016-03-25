@@ -27,6 +27,7 @@
   },
   "dependencies": {
     "async": "^1.5.2",
-    "request": "^2.53.0"
+    "request": "^2.53.0",
+    "sync-request": "^2.0.1"
   }
 }
