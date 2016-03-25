@@ -2,7 +2,7 @@ module.exports = (function () {
 
     const BACKEND_API = process.env.QCON2016_API;
 
-    const BATCH_SIZE = 400;
+    const BATCH_SIZE = 1000;
 
     var async = require('async');
     var yawp = require('./lib/yawp');
@@ -64,7 +64,7 @@ module.exports = (function () {
                 logBatchThroughput();
                 batchDone = 0;
 
-                if (loaded - done <= 3 * BATCH_SIZE) {
+                if (loaded - done <= 4 * BATCH_SIZE) {
                     loadMoreOrders();
                 }
             }
