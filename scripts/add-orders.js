@@ -31,7 +31,6 @@ module.exports = (function () {
         var throughputStart = new Date();
         var throughputBatchCount = 0;
         var throughputBatchDone = 0;
-        var batchLatency = 0;
 
         function addOrder(i, callback) {
             if (batchDone == BATCH_SIZE_FOR_THROUGHPUT) {
@@ -52,7 +51,6 @@ module.exports = (function () {
                 done++;
                 batchDone++;
                 throughputBatchDone++;
-                batchLatency += new Date().getTime() - requestStart.getTime();
                 callback();
             }).fail(function (err) {
                 console.log('fail?! ', err);
@@ -71,7 +69,7 @@ module.exports = (function () {
             yawp('/throughputs/created').update({
                 value: t.throughput,
                 timestamp: new Date().getTime(),
-                latencyAvg: (batchLatency / batchDone)
+                latencyAvg: (t.elapsed / batchDone)
             });
 
             throughputBatchCount++;
@@ -79,7 +77,6 @@ module.exports = (function () {
                 throughputStart = new Date();
                 throughputBatchDone = 0;
                 throughputBatchCount = 0;
-                batchLatency = 0;
             }
         }
 

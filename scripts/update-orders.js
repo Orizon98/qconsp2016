@@ -35,7 +35,6 @@ module.exports = (function () {
         var throughputStart = new Date();
         var throughputBatchCount = 0;
         var throughputBatchDone = 0;
-        var batchLatency = 0;
 
 
         function loadMoreOrders() {
@@ -86,7 +85,6 @@ module.exports = (function () {
             yawp.update(order).done(function () {
                 done++;
                 throughputBatchDone++;
-                batchLatency += new Date().getTime() - requestStart.getTime();
                 checkLoadMoreOrders();
                 doneCallback();
             }).fail(function (err) {
@@ -116,7 +114,7 @@ module.exports = (function () {
             yawp('/throughputs/' + toStatus.toLowerCase()).update({
                 value: t.throughput,
                 timestamp: new Date().getTime(),
-                latencyAvg: (batchLatency / batchDone)
+                latencyAvg: (t.elapsed / batchDone)
             });
 
             throughputBatchCount++;
@@ -124,7 +122,6 @@ module.exports = (function () {
                 throughputStart = new Date();
                 throughputBatchDone = 0;
                 throughputBatchCount = 0;
-                batchLatency = 0;
             }
         }
 
