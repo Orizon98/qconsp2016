@@ -31,10 +31,11 @@ module.exports = (function () {
         var throughputStart = new Date();
         var throughputBatchCount = 0;
         var throughputBatchDone = 0;
+        var batchLatency = 0;
 
         function addOrder(i, callback) {
             if (batchDone == BATCH_SIZE_FOR_THROUGHPUT) {
-                logBatchThroughput()
+                logBatchThroughput();
                 batchDone = 0;
             }
 
@@ -46,10 +47,12 @@ module.exports = (function () {
 
             console.log('create order ->', order);
 
+            var requestStart = new Date();
             yawp('/orders').create(order).done(function () {
                 done++;
                 batchDone++;
                 throughputBatchDone++;
+                batchLatency += new Date().getTime() - requestStart.getTime();
                 callback();
             }).fail(function (err) {
                 console.log('fail?! ', err);
@@ -67,7 +70,8 @@ module.exports = (function () {
             var t = throughput(throughputStart, throughputBatchDone);
             yawp('/throughputs/created').update({
                 value: t.throughput,
-                timestamp: new Date().getTime()
+                timestamp: new Date().getTime(),
+                latencyAvg: (batchLatency / batchDone)
             });
 
             throughputBatchCount++;
@@ -75,12 +79,13 @@ module.exports = (function () {
                 throughputStart = new Date();
                 throughputBatchDone = 0;
                 throughputBatchCount = 0;
+                batchLatency = 0;
             }
         }
 
         function logTotalThroughput() {
             var t = throughput(start, totalOrders);
-            console.log("Finished: " + totalOrders + " orders in " + (t.elapsed/1000) + " seconds. " + t.throughput + " orders/sec")
+            console.log("Finished: " + totalOrders + " orders in " + (t.elapsed / 1000) + " seconds. " + t.throughput + " orders/sec")
         }
 
         async.timesLimit(totalOrders, parallelRequests, addOrder, function () {

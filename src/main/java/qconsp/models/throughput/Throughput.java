@@ -12,6 +12,8 @@ public class Throughput {
 
     Integer value;
 
+    Integer latencyAvg;
+
     Long timestamp;
 
 }

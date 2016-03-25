@@ -35,6 +35,7 @@ module.exports = (function () {
         var throughputStart = new Date();
         var throughputBatchCount = 0;
         var throughputBatchDone = 0;
+        var batchLatency = 0;
 
 
         function loadMoreOrders() {
@@ -80,10 +81,12 @@ module.exports = (function () {
 
             console.log('update order ->', order.id, 'city=' + order.cityId, 'from=' + fromStatus, 'to=' + toStatus);
 
+            var requestStart = new Date();
             order.status = toStatus;
             yawp.update(order).done(function () {
                 done++;
                 throughputBatchDone++;
+                batchLatency += new Date().getTime() - requestStart.getTime();
                 checkLoadMoreOrders();
                 doneCallback();
             }).fail(function (err) {
@@ -112,7 +115,8 @@ module.exports = (function () {
             var t = throughput(throughputStart, throughputBatchDone);
             yawp('/throughputs/' + toStatus.toLowerCase()).update({
                 value: t.throughput,
-                timestamp: new Date().getTime()
+                timestamp: new Date().getTime(),
+                latencyAvg: (batchLatency / batchDone)
             });
 
             throughputBatchCount++;
@@ -120,6 +124,7 @@ module.exports = (function () {
                 throughputStart = new Date();
                 throughputBatchDone = 0;
                 throughputBatchCount = 0;
+                batchLatency = 0;
             }
         }
 

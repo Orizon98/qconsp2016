@@ -21,12 +21,15 @@
                 var total = 0;
                 ts.forEach(function (t) {
                     var value = 0;
+                    var latencyAvg = 0;
                     if (!expired(t.timestamp)) {
                         value = t.value;
+                        latencyAvg = t.latencyAvg;
                     }
 
                     total += value;
                     $('#global-throughput-' + getName(t.id)).html(value);
+                    $('#global-latency-' + getName(t.id)).html(latencyAvg);
 
                 });
 
