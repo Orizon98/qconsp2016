@@ -68,8 +68,7 @@ module.exports = (function () {
             var t = throughput(throughputStart, throughputBatchDone);
             yawp('/throughputs/created').update({
                 value: t.throughput,
-                timestamp: new Date().getTime(),
-                latencyAvg: (t.elapsed / batchDone)
+                timestamp: new Date().getTime()
             });
 
             throughputBatchCount++;

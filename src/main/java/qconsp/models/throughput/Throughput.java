@@ -11,9 +11,7 @@ public class Throughput {
     IdRef<Throughput> id;
 
     Integer value;
-
-    Integer latencyAvg;
-
+    
     Long timestamp;
 
 }

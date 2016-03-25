@@ -17,15 +17,6 @@ section {
     font-size: +2em;
 }
 
-#global-latency-label {
-    font-weight: bold;
-    text-align: right;
-}
-
-.latency td {
-    padding-top: 20px;
-}
-
 /* aggregations */
 
 .aggregation {
