@@ -1,8 +1,8 @@
 {
-  "name": "flowt",
+  "name": "qconsp2016",
   "version": "1.0.0",
   "description": "",
-  "main": "add-student.js",
+  "main": "add-orders.js",
   "directories": {
     "test": "test"
   },
@@ -11,7 +11,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git@github.com:feroult/yawp-dataflow-draft.git"
+    "url": "git@github.com:feroult/qconsp2016.git"
   },
   "keywords": [
     "appengine",
@@ -19,17 +19,14 @@
   ],
   "author": "",
   "bugs": {
-    "url": "https://github.com/feroult/yawp-dataflow-draft/issues"
+    "url": "https://github.com/feroult/qconsp2016/issues"
   },
-  "homepage": "https://github.com/feroult/yawp-dataflow-draft",
+  "homepage": "https://github.com/feroult/qconsp2016",
   "devDependencies": {
     "mockery": "^1.4.0"
   },
   "dependencies": {
-    "moment": "^2.9.0",
-    "moment-timezone": "^0.3.1",      
     "async": "^1.5.2",
-    "request": "^2.53.0",
-    "sync-request": "^2.0.1"
+    "request": "^2.53.0"
   }
 }
