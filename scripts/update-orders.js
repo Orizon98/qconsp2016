@@ -60,7 +60,7 @@ module.exports = (function () {
 
         function checkLoadMoreOrders() {
             batchDone++;
-            if (batchDone >= BATCH_SIZE / 6) {
+            if (batchDone >= BATCH_SIZE / 8) {
                 logBatchThroughput();
                 batchDone = 0;
 
